@@ -27,7 +27,7 @@ function createInitialPlots() {
     let i = 0;
     for (let row = 0; row<6; row++) {
         for (let col = 0; col<6; col++) {
-            plots.push({id:i.toString(), row, col, icon:"", plantId:null, customLabel:null, plantedDate:null});
+            plots.push({id:i.toString(), row, col, plantId:null, customLabel:null, plantedDate:null});
             i++;
         }
     }
