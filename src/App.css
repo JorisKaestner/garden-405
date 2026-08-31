@@ -4,6 +4,12 @@
      border: 1px solid #ccc;
 }
 
+.garden-cell--selected {
+    min-width: 40px;
+     min-height: 40px;
+     border: 2px solid red; 
+}
+
 .garden-grid {
   display: grid; grid-template-columns: repeat(6, 1fr);
 }
