@@ -1,6 +1,7 @@
 import { useState } from "react";
 import GardenGrid from "./GardenGrid";
 import type { Plot } from "../types";
+import SelectionPanel from "./SelectionInfoPanel";
 
 export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>(createInitialPlots());
@@ -15,15 +16,29 @@ export default function Garden() {
             return selected;
         });
     }
-    return <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={toggleSelectClick} />;
+
+    function updatePlot(id: string, update: Partial<Plot>) {
+        setPlots((prev) =>
+            prev.map((plot) => (plot.id === id ? { ...plot, ...update } : plot))
+        );
+    }
+
+    const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
+
+    return (
+        <>
+            <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={toggleSelectClick} />
+            <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)}/>
+        </>
+    );
 }
 
 function createInitialPlots() {
     const plots: Plot[] = [];
     let i = 0;
-    for (let row = 0; row<6; row++) {
-        for (let col = 0; col<6; col++) {
-            plots.push({id:i.toString(), row, col, plantId:null, customLabel:null, plantedDate:null});
+    for (let row = 0; row < 6; row++) {
+        for (let col = 0; col < 6; col++) {
+            plots.push({ id: i.toString(), row, col, plantId: null, customLabel: null, plantedDate: null });
             i++;
         }
     }
