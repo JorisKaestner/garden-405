@@ -6,6 +6,9 @@ type SelectionPanelProps = {
     onChange: (update: Partial<Plot>) => void;
 };
 
+/** Display a info box below the garden plots to show editable information about the selected plot.
+ * 
+ * Saves automatically on change. */
 export default function SelectionPanel({ plot, onChange }: SelectionPanelProps) {
     if (!plot) {
         return <div className="selection-panel">No plot selected.</div>
@@ -23,6 +26,7 @@ export default function SelectionPanel({ plot, onChange }: SelectionPanelProps) 
                         {PLANTS.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
                     </select>
 
+                    {/* Custom label option only gets displayed, when plantId 'other' is selected */}
                     {plot.plantId === "other" && (
                         <input
                             type="text"

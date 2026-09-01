@@ -7,6 +7,7 @@ type GardenGridProps = {
     onCellClick: (id:string) => void;
 };
 
+/** Displays GardenCell components as a grid */
 export default function GardenGrid({plots, selectedPlots, onCellClick} : GardenGridProps) {
     return(
         <div className="garden-grid">

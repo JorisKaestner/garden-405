@@ -3,12 +3,13 @@ import GardenGrid from "./GardenGrid";
 import type { Plot } from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
 
+/** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>(createInitialPlots());
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
 
-    /**
+    /*
     function toggleSelectClick(id: string) {
         setLastSelectedId(id);
         setSelectedIds((prev) => {
