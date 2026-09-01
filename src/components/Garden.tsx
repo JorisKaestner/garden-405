@@ -5,19 +5,15 @@ import type { Plot } from "../types";
 export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>(createInitialPlots());
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+    const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
 
     function toggleSelectClick(id: string) {
+        setLastSelectedId(id);
         setSelectedIds((prev) => {
             const selected = new Set(prev);
             selected.has(id) ? selected.delete(id) : selected.add(id);
             return selected;
         });
-    }
-
-    function handleCellClick(id: string) {
-        setPlots((prev) => 
-            prev.map((plot) => (plot.id === id ? { ...plot, plantId: "tomato" } : plot))
-        ); {/**Updates plantId of plot with matching id. Leaves plot as it is otherwise. */}
     }
     return <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={toggleSelectClick} />;
 }
