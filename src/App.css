@@ -1,15 +1,30 @@
 .garden-cell {
      min-width: 40px;
      min-height: 40px;
+     box-sizing: border-box;
      border: 1px solid #ccc;
 }
 
 .garden-cell--selected {
-    min-width: 40px;
+     min-width: 40px;
      min-height: 40px;
-     border: 2px solid red; 
+     box-sizing: border-box;
+     border: 2px solid red;
 }
 
 .garden-grid {
-  display: grid; grid-template-columns: repeat(6, 1fr);
+     display: grid;
+     grid-template-columns: repeat(6, 1fr);
+}
+
+.field-row {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 20px;
+}
+
+.field {
+     padding: 10px;
+     text-align: left;
+     min-width: 160px;
 }

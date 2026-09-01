@@ -8,6 +8,7 @@ export default function Garden() {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
 
+    /**
     function toggleSelectClick(id: string) {
         setLastSelectedId(id);
         setSelectedIds((prev) => {
@@ -15,6 +16,14 @@ export default function Garden() {
             selected.has(id) ? selected.delete(id) : selected.add(id);
             return selected;
         });
+    }
+    */
+
+    function selectClick(id: string) {
+        const selected = new Set<string>();
+        selected.add(id);
+        setLastSelectedId(id);
+        setSelectedIds(selected);
     }
 
     function updatePlot(id: string, update: Partial<Plot>) {
@@ -27,7 +36,7 @@ export default function Garden() {
 
     return (
         <>
-            <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={toggleSelectClick} />
+            <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
             <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)}/>
         </>
     );
