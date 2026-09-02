@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import GardenGrid from "./GardenGrid";
 import type { Plot } from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
@@ -8,6 +8,9 @@ export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>(createInitialPlots());
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
+    const [copiedPlot, setCopiedPlot] = useState<Partial<Plot> | null>(null);
+    const [history, setHistory] = useState<Plot[][]>([plots]);
+    const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
 
     /*
     function toggleSelectClick(id: string) {
@@ -28,17 +31,30 @@ export default function Garden() {
     }
 
     function updatePlot(id: string, update: Partial<Plot>) {
-        setPlots((prev) =>
-            prev.map((plot) => (plot.id === id ? { ...plot, ...update } : plot))
-        );
+        setPlots((prev) => {
+            setHistory((h) => [...h, prev]);
+            return prev.map((plot) => (plot.id === id ? { ...plot, ...update } : plot));
+        });
     }
 
-    const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
+    function revertChange() {
+        const previous = history.at(-1);
+        if (!previous) return;
+        setPlots(previous);
+        setHistory((h)=> h.slice(0,-1));
+    }
 
     return (
         <>
             <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
-            <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)}/>
+            <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
+            <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
+                plantId: lastSelectedPlot.plantId,
+                customLabel: lastSelectedPlot.customLabel,
+                plantedDate: lastSelectedPlot.plantedDate,
+            })}>Copy</button>
+            <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
+            <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
         </>
     );
 }
