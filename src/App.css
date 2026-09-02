@@ -28,3 +28,14 @@
      text-align: left;
      min-width: 160px;
 }
+
+.copy-paste-button {
+     padding: 2px;
+}
+
+.garden-controls {
+     padding: 10px;
+     display: flex;
+     flex-wrap: wrap;
+     gap: 10px;
+}

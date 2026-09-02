@@ -46,13 +46,15 @@ export default function Garden() {
         <>
             <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
             <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
-            <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
-                plantId: lastSelectedPlot.plantId,
-                customLabel: lastSelectedPlot.customLabel,
-                plantedDate: lastSelectedPlot.plantedDate,
-            })}>Copy</button>
-            <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
-            <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+            <div className="garden-controls">
+                <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
+                    plantId: lastSelectedPlot.plantId,
+                    customLabel: lastSelectedPlot.customLabel,
+                    plantedDate: lastSelectedPlot.plantedDate,
+                })}>Copy</button>
+                <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
+                <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+            </div>
         </>
     );
 }
