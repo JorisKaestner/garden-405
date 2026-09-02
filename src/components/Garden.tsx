@@ -9,7 +9,7 @@ export default function Garden() {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
     const [copiedPlot, setCopiedPlot] = useState<Partial<Plot> | null>(null);
-    const [history, setHistory] = useState<Plot[][]>([plots]);
+    const [history, setHistory] = useState<Plot[][]>([]);
     const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
 
     /*
@@ -31,17 +31,15 @@ export default function Garden() {
     }
 
     function updatePlot(id: string, update: Partial<Plot>) {
-        setPlots((prev) => {
-            setHistory((h) => [...h, prev]);
-            return prev.map((plot) => (plot.id === id ? { ...plot, ...update } : plot));
-        });
+        setHistory((h) => [...h, plots]);
+        setPlots((prev) => prev.map((plot) => (plot.id === id ? { ...plot, ...update } : plot)));
     }
 
     function revertChange() {
         const previous = history.at(-1);
         if (!previous) return;
         setPlots(previous);
-        setHistory((h)=> h.slice(0,-1));
+        setHistory((h) => h.slice(0, -1));
     }
 
     return (
