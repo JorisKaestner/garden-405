@@ -2,6 +2,7 @@ import { use, useState } from "react";
 import GardenGrid from "./GardenGrid";
 import type { Plot } from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
+import gardenLayout from "../assets/gardenLayout.svg";
 
 /** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {
@@ -44,7 +45,12 @@ export default function Garden() {
 
     return (
         <>
-            <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
+            <div className="garden-canvas" style={{position: "relative"}}>
+                <img src={gardenLayout} className="garden-bg" />
+                <div className="bed-overlay" style={{ position: "absolute", left: "32.5%", top: "53.5%", width: "20%", height: "30%"}}>
+                    <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
+                </div>
+            </div>
             <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
             <div className="garden-controls">
                 <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({

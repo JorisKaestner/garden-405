@@ -1,13 +1,13 @@
 .garden-cell {
-     min-width: 40px;
-     min-height: 40px;
+     min-width: 30px;
+     min-height: 30px;
      box-sizing: border-box;
      border: 1px solid #ccc;
 }
 
 .garden-cell--selected {
-     min-width: 40px;
-     min-height: 40px;
+     min-width: 30px;
+     min-height: 30px;
      box-sizing: border-box;
      border: 2px solid red;
 }
@@ -38,4 +38,9 @@
      display: flex;
      flex-wrap: wrap;
      gap: 10px;
+}
+
+.garden-bg { 
+     width: 100%;
+     display: block;
 }
