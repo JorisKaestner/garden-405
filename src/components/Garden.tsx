@@ -47,7 +47,7 @@ export default function Garden() {
         <>
             <div className="garden-canvas" style={{position: "relative"}}>
                 <img src={gardenLayout} className="garden-bg" />
-                <div className="bed-overlay" style={{ position: "absolute", left: "32.5%", top: "53.5%", width: "20%", height: "30%"}}>
+                <div className="bed-overlay" style={{ position: "absolute", left: "32.5%", top: "53.5%", width: "21.2%", height: "13.5%"}}>
                     <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
                 </div>
             </div>
