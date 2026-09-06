@@ -3,6 +3,7 @@ import GardenGrid from "./GardenGrid";
 import type { Plot } from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
 import gardenLayout from "../assets/gardenLayout.svg";
+import { FIELDS } from "../fields.ts"
 
 /** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {
@@ -45,11 +46,19 @@ export default function Garden() {
 
     return (
         <>
-            <div className="garden-canvas" style={{position: "relative"}}>
+            <div className="garden-canvas" style={{ position: "relative" }}>
                 <img src={gardenLayout} className="garden-bg" />
-                <div className="bed-overlay" style={{ position: "absolute", left: "32.5%", top: "53.5%", width: "21.2%", height: "13.5%"}}>
-                    <GardenGrid plots={plots} selectedPlots={selectedIds} onCellClick={selectClick} />
-                </div>
+                {FIELDS.map((field) => (
+                    <div key={field.id} className="bed-overlay" style={{ left: field.left, top: field.top, width: field.width, height: field.height }}>
+                        <GardenGrid
+                            plots={plots.filter((p) => p.gardenId === field.id)}
+                            rows={field.rows}
+                            cols={field.cols}
+                            selectedPlots={selectedIds}
+                            onCellClick={selectClick}
+                        />
+                    </div>
+                ))}
             </div>
             <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
             <div className="garden-controls">
@@ -67,11 +76,12 @@ export default function Garden() {
 
 function createInitialPlots() {
     const plots: Plot[] = [];
-    let i = 0;
-    for (let row = 0; row < 6; row++) {
-        for (let col = 0; col < 6; col++) {
-            plots.push({ id: i.toString(), row, col, plantId: null, customLabel: null, plantedDate: null });
-            i++;
+    for (let field of FIELDS) {
+        for (let currentRow = 0; currentRow < field.rows; currentRow++) {
+            for (let currentCol = 0; currentCol < field.cols; currentCol++) {
+                const idString = `${field.id}-${currentRow}-${currentCol}`
+                plots.push({ id: idString, gardenId: field.id, row: currentRow, col: currentCol, plantId: null, customLabel: null, plantedDate: null });
+            }
         }
     }
     return plots;

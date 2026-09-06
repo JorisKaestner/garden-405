@@ -1,5 +1,6 @@
 export type Plot = {
   id: string;
+  gardenId: string;
   row: number;
   col: number;
   plantId: string | null;
