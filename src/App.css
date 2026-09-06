@@ -47,7 +47,27 @@
      position: absolute;
 }
 
+.garden-canvas {
+  aspect-ratio: 994 / 1545;
+  max-height: 90vh;
+  width: auto;
+  margin: 0 auto;           
+}
+
 .garden-bg { 
      width: 100%;
      display: block;
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;      /* stacked: default (portrait/narrow) */
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .app-layout {
+    flex-direction: row;       /* side-by-side for wide screens */
+    align-items: flex-start;
+  }
 }
