@@ -45,7 +45,7 @@ export default function Garden() {
     }
 
     return (
-        <>
+        <div className="app-layout">
             <div className="garden-canvas" style={{ position: "relative" }}>
                 <img src={gardenLayout} className="garden-bg" />
                 {FIELDS.map((field) => (
@@ -60,17 +60,19 @@ export default function Garden() {
                     </div>
                 ))}
             </div>
-            <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
-            <div className="garden-controls">
-                <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
-                    plantId: lastSelectedPlot.plantId,
-                    customLabel: lastSelectedPlot.customLabel,
-                    plantedDate: lastSelectedPlot.plantedDate,
-                })}>Copy</button>
-                <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
-                <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+            <div>
+                <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
+                <div className="garden-controls">
+                    <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
+                        plantId: lastSelectedPlot.plantId,
+                        customLabel: lastSelectedPlot.customLabel,
+                        plantedDate: lastSelectedPlot.plantedDate,
+                    })}>Copy</button>
+                    <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
+                    <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+                </div>
             </div>
-        </>
+        </div>
     );
 }
 

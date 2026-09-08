@@ -16,7 +16,7 @@ export default function GardenCell({ plot, isSelected, onClick }: GardenCellProp
       className={cellClass}
       onClick={() => onClick(plot.id)}
     >
-      {plantIcon ?? ""}  {/**Displays plantIcon or empty string if null */}
+      <span className="garden-cell-icon">{plantIcon ?? ""} </span>  {/**Displays plantIcon or empty string if null */}
     </div>
   );
 }

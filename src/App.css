@@ -1,4 +1,10 @@
 .garden-cell {
+     font-size: clamp(4px, 2vw, 20px);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     container-type: inline-size;
+     overflow: hidden;
      min-width: 5px;
      min-height: 5px;
      box-sizing: border-box;
@@ -6,10 +12,19 @@
 }
 
 .garden-cell--selected {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     container-type: inline-size;
+     overflow: hidden;
      min-width: 5px;
      min-height: 5px;
      box-sizing: border-box;
      border: 2px solid red;
+}
+
+.garden-cell-icon {
+  font-size: 55cqw;
 }
 
 .garden-grid {
