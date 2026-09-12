@@ -33,13 +33,13 @@
      display: grid;
 }
 
-.field-row {
+.bed-row {
      display: flex;
      flex-wrap: wrap;
      gap: 20px;
 }
 
-.field {
+.bed {
      padding: 10px;
      text-align: left;
      min-width: 160px;

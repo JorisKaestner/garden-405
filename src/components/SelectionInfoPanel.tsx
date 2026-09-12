@@ -15,8 +15,8 @@ export default function SelectionPanel({ plot, onChange }: SelectionPanelProps) 
     }
     return (
         <div className="selection-panel">
-            <div className="field-row">
-                <div className="field">
+            <div className="bed-row">
+                <div className="bed">
                     <h4>Plant</h4>
                     <select
                         value={plot.plantId ?? ""}
@@ -36,7 +36,7 @@ export default function SelectionPanel({ plot, onChange }: SelectionPanelProps) 
                     )}
                 </div>
 
-                <div className="field">
+                <div className="bed">
                     <h4>Date planted</h4>
                     <input
                         type="date"

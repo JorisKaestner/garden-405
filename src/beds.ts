@@ -1,4 +1,4 @@
-type FieldConfig = {
+type BedConfig = {
     id: string;
     rows: number;
     cols: number;
@@ -8,7 +8,7 @@ type FieldConfig = {
     height: string;
 }
 
-export const FIELDS: FieldConfig[] = [
+export const BEDS: BedConfig[] = [
     { id: "bog", rows: 5, cols: 5, left: "32.9%", top: "53.9%", width: "21%", height: "13.5%" },
     { id: "strawberry", rows: 5, cols: 5, left: "62%", top: "71.6%", width: "21%", height: "13.5%" },
     { id: "sunflower", rows: 5, cols: 5, left: "32.9%", top: "71.6%", width: "21%", height: "13.5%" },
