@@ -1,19 +1,30 @@
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import GardenGrid from "./GardenGrid";
 import type { Plot } from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
 import gardenLayout from "../assets/gardenLayout.svg";
 import { BEDS } from "../beds.ts"
+import { supabase } from "../supabase/supabaseClient.ts";
 
 /** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {
-    const [plots, setPlots] = useState<Plot[]>(createInitialPlots());
+    const [plots, setPlots] = useState<Plot[]>([]);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
     const [copiedPlot, setCopiedPlot] = useState<Partial<Plot> | null>(null);
     const [history, setHistory] = useState<Plot[][]>([]);
     const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
 
+    useEffect(() => {
+        async function loadPlots() {
+            const { data, error } = await supabase.from("plots").select("*");
+            if (error) { console.error(error); return; }
+            console.log("fetched:", data);
+            setPlots(data);
+        }
+        loadPlots();
+    }, []);
+    
     /*
     function toggleSelectClick(id: string) {
         setLastSelectedId(id);
@@ -74,17 +85,4 @@ export default function Garden() {
             </div>
         </div>
     );
-}
-
-function createInitialPlots() {
-    const plots: Plot[] = [];
-    for (let bed of BEDS) {
-        for (let currentRow = 0; currentRow < bed.rows; currentRow++) {
-            for (let currentCol = 0; currentCol < bed.cols; currentCol++) {
-                const idString = `${bed.id}-${currentRow}-${currentCol}`
-                plots.push({ id: idString, gardenId: bed.id, row: currentRow, col: currentCol, plantId: null, customLabel: null, plantedDate: null });
-            }
-        }
-    }
-    return plots;
 }
