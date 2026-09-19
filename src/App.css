@@ -61,8 +61,8 @@
 }
 
 .garden-canvas {
-     aspect-ratio: 994 / 1545;
-     max-height: 90vh;
+     aspect-ratio: 994 / 1277;
+     max-height: 85vh;
      width: auto;
      margin: 0 auto;
 }
@@ -79,7 +79,7 @@
      gap: 16px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
      .app-layout {
           flex-direction: row;
           /* side-by-side for wide screens */
