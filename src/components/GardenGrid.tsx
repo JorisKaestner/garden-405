@@ -21,7 +21,14 @@ export default function GardenGrid({ plots, rows, cols, plants, selectedPlots, o
             }}
         >
             {plots.map((plot) => (
-                <GardenCell key={plot.id} plot={plot} isSelected={selectedPlots.has(plot.id)} plants={plants} onClick={onCellClick} />
+                <GardenCell
+                    key={plot.id}
+                    plot={plot}
+                    isSelected={selectedPlots.has(plot.id)}
+                    plants={plants}
+                    onClick={onCellClick}
+                    style={{ gridColumn: plot.col + 1, gridRow: plot.row + 1 }}
+                />
             ))}
         </div>
     );
