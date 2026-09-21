@@ -1,0 +1,6 @@
+id,name,icon,harvestWeeksMin,harvestWeeksMax
+tomato,Tomato,🍅,18,27
+carrot,Carrot,🥕,7,16
+lettuce,Lettuce,🥬,8,10
+pepper,Pepper,🌶️,16,22
+other,Other,🌱,,
