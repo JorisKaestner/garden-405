@@ -1,16 +1,16 @@
-import type { Plot } from "../types";
-import { PLANTS } from "../plants";
+import type { Plant, Plot } from "../types";
 
 type GardenCellProps = {
   plot: Plot;
   isSelected: boolean;
+  plants: Plant[];
   onClick: (id: string) => void;
 };
 
 /** Base-level component to display a single plot and highlight its selection */
-export default function GardenCell({ plot, isSelected, onClick }: GardenCellProps) {
+export default function GardenCell({ plot, isSelected, plants, onClick }: GardenCellProps) {
   const cellClass = isSelected ? "garden-cell--selected" : "garden-cell"; // change to subclass structure if needed
-  const plantIcon = PLANTS.find(plant => plant.id === plot.plantId)?.icon;
+  const plantIcon = plants.find(plant => plant.id === plot.plantId)?.icon;
   return (
     <div 
       className={cellClass}

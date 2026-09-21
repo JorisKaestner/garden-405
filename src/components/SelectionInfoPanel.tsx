@@ -1,15 +1,15 @@
-import type { Plot } from "../types";
-import { PLANTS } from "../plants";
+import type { Plant, Plot } from "../types";
 
 type SelectionPanelProps = {
     plot: Plot | null;
+    plants: Plant[];
     onChange: (update: Partial<Plot>) => void;
 };
 
 /** Display a info box below the garden plots to show editable information about the selected plot.
  * 
  * Saves automatically on change. */
-export default function SelectionPanel({ plot, onChange }: SelectionPanelProps) {
+export default function SelectionPanel({ plot, plants, onChange }: SelectionPanelProps) {
     if (!plot) {
         return <div className="selection-panel">No plot selected.</div>
     }
@@ -23,7 +23,7 @@ export default function SelectionPanel({ plot, onChange }: SelectionPanelProps) 
                         onChange={(edit) => onChange({ plantId: edit.target.value || null })}
                     >
                         <option value="">-- none --</option>
-                        {PLANTS.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
+                        {plants.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
                     </select>
 
                     {/* Custom label option only gets displayed, when plantId 'other' is selected */}

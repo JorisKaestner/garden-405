@@ -1,6 +1,6 @@
 import { use, useEffect, useState } from "react";
 import GardenGrid from "./GardenGrid";
-import type { Plot } from "../types";
+import { type Plant, type Plot } from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
 import gardenLayout from "../assets/gardenLayout.svg";
 import { BEDS } from "../beds.ts"
@@ -9,12 +9,14 @@ import { supabase } from "../supabase/supabaseClient.ts";
 /** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>([]);
+    const [plants, setPlants] = useState<Plant[]>([]);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
     const [copiedPlot, setCopiedPlot] = useState<Partial<Plot> | null>(null);
     const [history, setHistory] = useState<Plot[][]>([]);
     const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
 
+    /* Load plots from supabase */
     useEffect(() => {
         async function loadPlots() {
             const { data, error } = await supabase.from("plots").select("*");
@@ -24,17 +26,17 @@ export default function Garden() {
         }
         loadPlots();
     }, []);
-    
-    /*
-    function toggleSelectClick(id: string) {
-        setLastSelectedId(id);
-        setSelectedIds((prev) => {
-            const selected = new Set(prev);
-            selected.has(id) ? selected.delete(id) : selected.add(id);
-            return selected;
-        });
-    }
-    */
+
+    /* Load plantTypes from supabase */
+    useEffect(() => {
+        async function loadPlants() {
+            const { data, error } = await supabase.from("plants").select("*");
+            if (error) { console.error(error); return; }
+            console.log("fetched:", data);
+            setPlants(data);
+        }
+        loadPlants();
+    }, []);
 
     function selectClick(id: string) {
         const selected = new Set<string>();
@@ -43,9 +45,11 @@ export default function Garden() {
         setSelectedIds(selected);
     }
 
-    function updatePlot(id: string, update: Partial<Plot>) {
+    async function updatePlot(id: string, update: Partial<Plot>) {
         setHistory((h) => [...h, plots]);
         setPlots((prev) => prev.map((plot) => (plot.id === id ? { ...plot, ...update } : plot)));
+        const { error } = await supabase.from("plots").update(update).eq("id", id);
+        if (error) console.error(error);
     }
 
     function revertChange() {
@@ -65,6 +69,7 @@ export default function Garden() {
                             plots={plots.filter((p) => p.gardenId === bed.id)}
                             rows={bed.rows}
                             cols={bed.cols}
+                            plants={plants}
                             selectedPlots={selectedIds}
                             onCellClick={selectClick}
                         />
@@ -72,7 +77,7 @@ export default function Garden() {
                 ))}
             </div>
             <div>
-                <SelectionPanel plot={lastSelectedPlot} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
+                <SelectionPanel plot={lastSelectedPlot} plants={plants} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
                 <div className="garden-controls">
                     <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
                         plantId: lastSelectedPlot.plantId,
