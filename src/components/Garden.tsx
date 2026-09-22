@@ -1,12 +1,22 @@
 
 /** Garden.tsx
  *  Main-entrypoint for crop planting user interface  */
+
+// react
 import { useEffect, useState } from "react";
+
+// components
 import GardenGrid from "./GardenGrid";
-import type {Plant, Plot, Gardener} from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
 import gardenLayout from "../assets/gardenLayout.svg";  // TODO: move path to config file
+import LoginForm from "./LoginForm.tsx";
+
+// types
+import type { Plant, Plot, Gardener } from "../types";
 import { BEDS } from "../beds.ts"
+
+// supabase
+import { useAuth } from "../supabase/AuthContext.tsx";
 import { supabase } from "../supabase/supabaseClient.ts";
 
 /** Top-level component to render and edit the garden plots and InfoPanel*/
@@ -16,6 +26,7 @@ export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>([]);
     const [plants, setPlants] = useState<Plant[]>([]);
     const [gardeners, setGardeners] = useState<Gardener[]>([]);
+    const user = useAuth();
 
     // UI interaction
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -47,7 +58,7 @@ export default function Garden() {
     }, []);
 
     /* Load gardeners from supabase */
-     useEffect(() => {
+    useEffect(() => {
         async function loadGardeners() {
             const { data, error } = await supabase.from("gardeners").select("*");
             if (error) { console.error(error); return; }
@@ -55,7 +66,7 @@ export default function Garden() {
             setGardeners(data);
         }
         loadGardeners();
-    }, []);   
+    }, []);
 
     function selectClick(id: string) {
         const selected = new Set<string>();
@@ -95,18 +106,25 @@ export default function Garden() {
                     </div>
                 ))}
             </div>
-            <div>
-                <SelectionPanel plot={lastSelectedPlot} plants={plants} gardeners={gardeners} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
-                <div className="garden-controls">
-                    <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
-                        plantId: lastSelectedPlot.plantId,
-                        customLabel: lastSelectedPlot.customLabel,
-                        plantedDate: lastSelectedPlot.plantedDate,
-                    })}>Copy</button>
-                    <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
-                    <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+            {user ? (
+                <div>
+                    <SelectionPanel plot={lastSelectedPlot} plants={plants} gardeners={gardeners} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
+                    <div className="garden-controls">
+                        <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
+                            plantId: lastSelectedPlot.plantId,
+                            customLabel: lastSelectedPlot.customLabel,
+                            plantedDate: lastSelectedPlot.plantedDate,
+                        })}>Copy</button>
+                        <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
+                        <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+                    </div>
+                    <button onClick={() => supabase.auth.signOut()}>Sign out</button>
                 </div>
-            </div>
+            ) : (
+                <div>
+                    <LoginForm />
+                </div>
+            )}
         </div>
     );
 }
