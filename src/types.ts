@@ -6,6 +6,7 @@ export type Plot = {
   plantId: string | null;
   customLabel: string | null;
   plantedDate: string | null;  // ISO date string ("2026-08-31")
+  plantedBy: string | null;
 };
 
 export type Plant = {
@@ -14,4 +15,9 @@ export type Plant = {
   icon: string | null;
   harvestWeeksMin: number | null;
   harvestWeeksMax: number | null;
+};
+
+export type Gardener = {
+  id: string;
+  name: string;
 };

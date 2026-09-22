@@ -1,15 +1,23 @@
-import { use, useEffect, useState } from "react";
+
+/** Garden.tsx
+ *  Main-entrypoint for crop planting user interface  */
+import { useEffect, useState } from "react";
 import GardenGrid from "./GardenGrid";
-import { type Plant, type Plot } from "../types";
+import type {Plant, Plot, Gardener} from "../types";
 import SelectionPanel from "./SelectionInfoPanel";
-import gardenLayout from "../assets/gardenLayout.svg";
+import gardenLayout from "../assets/gardenLayout.svg";  // TODO: move path to config file
 import { BEDS } from "../beds.ts"
 import { supabase } from "../supabase/supabaseClient.ts";
 
 /** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {
+    /*** states ***/
+    // supabase persistent data
     const [plots, setPlots] = useState<Plot[]>([]);
     const [plants, setPlants] = useState<Plant[]>([]);
+    const [gardeners, setGardeners] = useState<Gardener[]>([]);
+
+    // UI interaction
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
     const [lastSelectedId, setLastSelectedId] = useState<string | null>(null);
     const [copiedPlot, setCopiedPlot] = useState<Partial<Plot> | null>(null);
@@ -37,6 +45,17 @@ export default function Garden() {
         }
         loadPlants();
     }, []);
+
+    /* Load gardeners from supabase */
+     useEffect(() => {
+        async function loadGardeners() {
+            const { data, error } = await supabase.from("gardeners").select("*");
+            if (error) { console.error(error); return; }
+            console.log("fetched:", data);
+            setGardeners(data);
+        }
+        loadGardeners();
+    }, []);   
 
     function selectClick(id: string) {
         const selected = new Set<string>();
@@ -77,7 +96,7 @@ export default function Garden() {
                 ))}
             </div>
             <div>
-                <SelectionPanel plot={lastSelectedPlot} plants={plants} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
+                <SelectionPanel plot={lastSelectedPlot} plants={plants} gardeners={gardeners} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
                 <div className="garden-controls">
                     <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
                         plantId: lastSelectedPlot.plantId,
