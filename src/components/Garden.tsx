@@ -106,25 +106,33 @@ export default function Garden() {
                     </div>
                 ))}
             </div>
-            {user ? (
-                <div>
-                    <SelectionPanel plot={lastSelectedPlot} plants={plants} gardeners={gardeners} onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)} />
-                    <div className="garden-controls">
-                        <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
-                            plantId: lastSelectedPlot.plantId,
-                            customLabel: lastSelectedPlot.customLabel,
-                            plantedDate: lastSelectedPlot.plantedDate,
-                        })}>Copy</button>
-                        <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
-                        <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
-                    </div>
-                    <button onClick={() => supabase.auth.signOut()}>Sign out</button>
-                </div>
-            ) : (
-                <div>
-                    <LoginForm />
-                </div>
-            )}
+            <div>
+                <SelectionPanel
+                    plot={lastSelectedPlot}
+                    plants={plants}
+                    gardeners={gardeners}
+                    onChange={(update) => lastSelectedId && updatePlot(lastSelectedId, update)}
+                    readonly={!user}
+                />
+                {user && (
+                    <>
+                        <div className="garden-controls">
+                            <button className="copy-paste-button" onClick={() => lastSelectedPlot && setCopiedPlot({
+                                plantId: lastSelectedPlot.plantId,
+                                customLabel: lastSelectedPlot.customLabel,
+                                plantedDate: lastSelectedPlot.plantedDate,
+                            })}>Copy</button>
+                            <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
+                            <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
+                        </div>
+                        <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+                    </>
+                )}
+                {!user &&
+                    (<div>
+                        <LoginForm />
+                    </div>)}
+            </div>
         </div>
     );
 }

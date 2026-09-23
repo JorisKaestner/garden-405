@@ -8,12 +8,14 @@ type SelectionPanelProps = {
     plants: Plant[];
     gardeners: Gardener[];
     onChange: (update: Partial<Plot>) => void;
+    readonly: boolean;
 };
 
 /** Display a info box below the garden plots to show editable information about the selected plot.
+ *  Editing disabled, when not logged in
  * 
  * Saves automatically on change. */
-export default function SelectionPanel({ plot, plants, gardeners, onChange }: SelectionPanelProps) {
+export default function SelectionPanel({ plot, plants, gardeners, onChange, readonly }: SelectionPanelProps) {
     if (!plot) {
         return <div className="selection-panel">No plot selected.</div>
     }
@@ -26,6 +28,7 @@ export default function SelectionPanel({ plot, plants, gardeners, onChange }: Se
                     <select
                         value={plot.plantId ?? ""}
                         onChange={(edit) => onChange({ plantId: edit.target.value || null })}
+                        disabled={readonly}
                     >
                         <option value="">-- none --</option>
                         {plants.map((p) => (<option key={p.id} value={p.id}>{p.name}</option>))}
@@ -37,10 +40,11 @@ export default function SelectionPanel({ plot, plants, gardeners, onChange }: Se
                             type="text"
                             value={plot.customLabel ?? ""}
                             onChange={(e) => onChange({ customLabel: e.target.value })}
+                            disabled={readonly}
                         />
                     )}
                 </div>
-                
+
                 {/** 'Date planted' selector */}
                 <div className="bed">
                     <h4>Date planted</h4>
@@ -48,19 +52,24 @@ export default function SelectionPanel({ plot, plants, gardeners, onChange }: Se
                         type="date"
                         value={plot.plantedDate ?? ""}
                         onChange={(edit) => onChange({ plantedDate: edit.target.value })}
+                        disabled={readonly}
                     />
                 </div>
-                
+
                 {/** 'Planted by' selector */}
                 <div className="bed">
-                    <h4>Planted by</h4>
-                    <select
-                        value={plot.plantedBy ?? ""}
-                        onChange={(edit) => onChange({ plantedBy: edit.target.value || null })}
-                    >
-                        <option value="">-- none --</option>
-                        {gardeners.map((g) => (<option key={g.id} value={g.id}>{g.name}</option>))}
-                    </select>
+                    {!readonly && (
+                        <>
+                            <h4>Planted by</h4>
+                            <select
+                                value={plot.plantedBy ?? ""}
+                                onChange={(edit) => onChange({ plantedBy: edit.target.value || null })}
+                            >
+                                <option value="">-- none --</option>
+                                {gardeners.map((g) => (<option key={g.id} value={g.id}>{g.name}</option>))}
+                            </select>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

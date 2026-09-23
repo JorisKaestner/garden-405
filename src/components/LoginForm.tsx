@@ -21,7 +21,10 @@ export default function LoginForm() {
     }
 
     if (status === "sent") {
-        return <p>Check your email for a login link.</p>;
+        return (<>
+            <h3>Login to edit:</h3>
+            <p>Check your email for a login link.</p>
+        </>);
     }
 
     return (
