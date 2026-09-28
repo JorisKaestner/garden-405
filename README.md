@@ -8,7 +8,7 @@ Every year, our little garden with the plot number 405 flourishes with plants of
 
 Garden 405 is a small web application for organizing our garden plots and keeping track of the plants growing in them.
 
-You can explore the current once we go online. Since this application contains data from our real garden, visitor accounts and write access are disabled. You are nevertheless welcome to explore the application or deploy your own instance and adapt it to your needs.
+You can explore the current state once we go online. Since this application contains data from our real garden, visitor accounts and write access are disabled. You are nevertheless welcome to explore the application or deploy your own instance and adapt it to your needs.
 
 ![Demo Screenshot](src/assets/demo_screenshot.png "Demo Screenshot")
 
