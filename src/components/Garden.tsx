@@ -12,8 +12,7 @@ import gardenLayout from "../assets/gardenLayout.svg";  // TODO: move path to co
 import LoginForm from "./LoginForm.tsx";
 
 // types
-import type { Plant, Plot, Gardener } from "../types";
-import { BEDS } from "../beds.ts"
+import type { Plant, Plot, Gardener, Bed } from "../types";
 
 // supabase
 import { useAuth } from "../supabase/AuthContext.tsx";
@@ -26,6 +25,7 @@ export default function Garden() {
     const [plots, setPlots] = useState<Plot[]>([]);
     const [plants, setPlants] = useState<Plant[]>([]);
     const [gardeners, setGardeners] = useState<Gardener[]>([]);
+    const [beds, setBeds] = useState<Bed[]>([]);
     const user = useAuth();
 
     // UI interaction
@@ -34,6 +34,17 @@ export default function Garden() {
     const [copiedPlot, setCopiedPlot] = useState<Partial<Plot> | null>(null);
     const [history, setHistory] = useState<Plot[][]>([]);
     const lastSelectedPlot = plots.find((p) => p.id === lastSelectedId) ?? null;
+
+    /* Load beds from supabase */
+    useEffect(() => {
+        async function loadBeds() {
+            const { data, error } = await supabase.from("beds").select("*");
+            if (error) { console.error(error); return; }
+            console.log("fetched:", data);
+            setBeds(data);
+        }
+        loadBeds();
+    }, []);
 
     /* Load plots from supabase */
     useEffect(() => {
@@ -93,7 +104,7 @@ export default function Garden() {
         <div className="app-layout">
             <div className="garden-canvas" style={{ position: "relative" }}>
                 <img src={gardenLayout} className="garden-bg" />
-                {BEDS.map((bed) => (
+                {beds.map((bed) => (
                     <div key={bed.id} className="bed-overlay" style={{ left: bed.left, top: bed.top, width: bed.width, height: bed.height }}>
                         <GardenGrid
                             plots={plots.filter((p) => p.gardenId === bed.id)}
@@ -106,7 +117,7 @@ export default function Garden() {
                     </div>
                 ))}
             </div>
-            <div>
+            <div className="garden-side-panel">
                 <SelectionPanel
                     plot={lastSelectedPlot}
                     plants={plants}
@@ -125,11 +136,13 @@ export default function Garden() {
                             <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
                             <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
                         </div>
+                        <hr/>
                         <button onClick={() => supabase.auth.signOut()}>Sign out</button>
                     </>
                 )}
                 {!user &&
                     (<div>
+                        <hr/>
                         <LoginForm />
                     </div>)}
             </div>

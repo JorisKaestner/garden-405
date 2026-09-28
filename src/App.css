@@ -56,6 +56,11 @@
      gap: 10px;
 }
 
+.garden-side-panel {
+     padding: 20px;
+     justify-content: center;
+}
+
 .bed-overlay {
      position: absolute;
 }
@@ -84,5 +89,6 @@
           flex-direction: row;
           /* side-by-side for wide screens */
           align-items: flex-start;
+          display: inline-flex;
      }
 }
