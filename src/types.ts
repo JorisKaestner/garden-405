@@ -21,3 +21,13 @@ export type Gardener = {
   id: string;
   name: string;
 };
+
+export type Bed = {
+    id: string;
+    rows: number;
+    cols: number;
+    left: string;
+    top: string;
+    width: string;
+    height: string;
+}
