@@ -15,6 +15,7 @@ export type Plant = {
   icon: string | null;
   harvestWeeksMin: number | null;
   harvestWeeksMax: number | null;
+  harvestMonth: string | null;
 };
 
 export type Gardener = {
