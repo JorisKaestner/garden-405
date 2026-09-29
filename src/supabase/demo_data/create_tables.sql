@@ -4,7 +4,8 @@ create table if not exists plants (
   name text not null,
   icon text not null,
   "harvestWeeksMin" integer,
-  "harvestWeeksMax" integer
+  "harvestWeeksMax" integer,
+  "harvestMonth" text
 );
 
 create table if not exists gardeners (

@@ -11,8 +11,8 @@ insert into beds (id, rows, cols, "left", "top", width, height) values
 on conflict (id) do nothing;
 
 insert into plants (id, name, icon, "harvestWeeksMin", "harvestWeeksMax") values
-  ('tomato', 'Tomato', '🍅', 18, 27),
-  ('carrot', 'Carrot', '🥕', 7, 16),
+  ('tomato', 'Tomato', '🍅', 18, 27, null),
+  ('carrot', 'Carrot', '🥕', 7, 16, null),
   ('other', 'Other', '🌱', null, null)
 on conflict (id) do nothing;
 
