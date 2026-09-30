@@ -6,17 +6,17 @@
 import { useEffect, useState } from "react";
 
 // components
-import GardenGrid from "./GardenGrid";
-import SelectionPanel from "./SelectionInfoPanel";
+import GardenGrid from "./GardenGrid.tsx";
+import SelectionPanel from "./SelectionInfoPanel.tsx";
 import gardenLayout from "../assets/gardenLayout.svg";  // TODO: move path to config file
 import LoginForm from "./LoginForm.tsx";
 
 // types
-import type { Plant, Plot, Gardener, Bed } from "../types";
+import type { Plant, Plot, Gardener, Bed } from "../../types.ts";
 
 // supabase
-import { useAuth } from "../supabase/AuthContext.tsx";
-import { supabase } from "../supabase/supabaseClient.ts";
+import { useAuth } from "../../supabase/AuthContext.tsx";
+import { supabase } from "../../supabase/supabaseClient.ts";
 
 /** Top-level component to render and edit the garden plots and InfoPanel*/
 export default function Garden() {

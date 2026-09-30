@@ -1,7 +1,7 @@
 /** SelectionInfoPanel.tsx
  *  Side panel to display and edit information about selected plot
  */
-import type { Plant, Plot, Gardener } from "../types";
+import type { Plant, Plot, Gardener } from "../../types";
 
 type SelectionPanelProps = {
     plot: Plot | null;

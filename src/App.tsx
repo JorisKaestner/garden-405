@@ -1,4 +1,4 @@
-import Garden from "./components/Garden";
+import Garden from "./garden_planner/components/Garden";
 import "./App.css";
 import { AuthProvider } from "./supabase/AuthContext";
 

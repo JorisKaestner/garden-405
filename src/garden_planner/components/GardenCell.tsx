@@ -1,4 +1,4 @@
-import type { Plant, Plot } from "../types";
+import type { Plant, Plot } from "../../types";
 
 type GardenCellProps = {
   plot: Plot;
