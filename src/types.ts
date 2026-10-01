@@ -32,3 +32,10 @@ export type Bed = {
     width: string;
     height: string;
 }
+
+export type ServiceSlot = {
+    id: string;
+    gardenerId: string | null;
+    date: string;  // ISO date string ("2026-08-31")
+    hoursCompleted: number;
+}
