@@ -92,3 +92,20 @@
           display: inline-flex;
      }
 }
+
+.site-nav {
+  display: flex;
+  gap: 24px;
+  padding: 12px 24px;
+  border-bottom: 1px solid #333;
+}
+
+.site-nav a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.site-nav a.active {
+  color: #7cb342; /* pull this from your garden's green tones for consistency */
+}
