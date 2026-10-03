@@ -1,3 +1,4 @@
+/* GARDEN LAYOUT CSS */
 .garden-cell {
      font-size: clamp(4px, 2vw, 20px);
      display: flex;
@@ -93,19 +94,53 @@
      }
 }
 
-.site-nav {
-  display: flex;
-  gap: 24px;
-  padding: 12px 24px;
-  border-bottom: 1px solid #333;
+/* SITE NAV CSS */
+.site-nav {   
+     display: flex; 
+     gap: 24px; 
+     padding: 12px;
+     border-bottom: 1px solid var(--c-border); 
 }
+.site-nav a { color: var(--c-muted); }
+.site-nav a.active { color: var(--c-accent); }
 
-.site-nav a {
-  color: #ccc;
-  text-decoration: none;
-  font-weight: 500;
-}
+/* SERVICE PAGE CSS */
+.service-page { max-width: 640px; margin: 0 auto; text-align: left; }
+.service-page h2, .service-page h3 { color: var(--c-text); }
 
-.site-nav a.active {
-  color: #7cb342; /* pull this from your garden's green tones for consistency */
+.card { padding:2%; border: 1px solid var(--c-border); background: var(--c-surface); }
+.card h2 { margin-top: 0; }
+
+.slot-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.slot-form input, .slot-form select {
+  width: 100%;
+  box-sizing: border-box;
 }
+.slot-form input, .slot-form select, .slot-form button {
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+.slot-form button {
+  background: var(--c-accent);
+  color: var(--c-bg);
+  border-color: transparent;
+  cursor: pointer;
+}
+.slot-form label { flex: 1 1 120px; }
+.slot-form label { color: var(--c-muted); }
+
+.slot-list { list-style: none; padding: 0; margin: 0; }
+.slot-list li { display: grid; align-items: center; grid-template-columns: 1fr 7rem 3rem 2rem; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.slot-list li span:nth-child(3) { text-align: center; }
+.year-total { color: var(--c-accent); }
+
+.preview-wrap { position: relative; min-height: 220px; }
+.preview-blur { filter: blur(5px); user-select: none; pointer-events: none; }
+.preview-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+
+.delete-btn { color: var(--c-muted); }
+.delete-btn:hover { color: var(--c-danger); }

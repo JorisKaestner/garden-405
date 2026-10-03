@@ -10,6 +10,7 @@ export default function ServiceHours() {
 
     // supabase user auth
     const authenticatedUser = useAuth();
+    const isLoggedIn = authenticatedUser !== null;
 
     // Form state
     const [date, setDate] = useState(
@@ -17,6 +18,14 @@ export default function ServiceHours() {
     );
     const [gardenerId, setGardenerId] = useState("");
     const [hoursCompleted, setHoursCompleted] = useState(1);
+
+    // dummy view when not logged in
+    const PREVIEW_ROWS = [
+        { date: "12.06.2026", hours: 2 },
+        { date: "03.05.2026", hours: 3 },
+        { date: "21.04.2026", hours: 1 },
+        { date: "08.03.2026", hours: 2 },
+    ];
 
 
     /* Load serviceSlots from supabase */
@@ -32,6 +41,7 @@ export default function ServiceHours() {
 
     /* Load gardeners from supabase */
     useEffect(() => {
+        if (!isLoggedIn) { setGardeners([]); return; }
         async function loadGardeners() {
             const { data, error } = await supabase.from("gardeners").select("*");
             if (error) { console.error(error); return; }
@@ -39,7 +49,7 @@ export default function ServiceHours() {
             setGardeners(data);
         }
         loadGardeners();
-    }, []);
+    }, [isLoggedIn]);
 
     // sort by date
     const sortedSlots = [...serviceSlots].sort((a, b) => b.date.localeCompare(a.date));
@@ -67,6 +77,20 @@ export default function ServiceHours() {
         setServiceSlots((current) => [...current, data]);
     }
 
+    async function deleteServiceSlot(id: ServiceSlot["id"]) {
+        const { data, error } = await supabase
+            .from("service_hours")
+            .delete()
+            .eq("id", id)
+            .select();
+        if (error) { console.error(error); return; }
+        if (data.length === 0) {
+            console.error("Nothing deleted, check the RLS delete policy");
+            return;
+        }
+        setServiceSlots((current) => current.filter((s) => s.id !== id));
+    }
+
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -83,66 +107,94 @@ export default function ServiceHours() {
     }
 
     return (
-        <>
-            <div>
-                <h2>Add community service hours</h2>
-                <form onSubmit={handleSubmit}>
-                    <select
-                        value={gardenerId}
-                        onChange={(e) => setGardenerId(e.target.value)}
-                        disabled={!authenticatedUser}
-                    >
-                        <option value="">-- none --</option>
-                        {gardeners.map((g) => (<option key={g.id} value={g.id}>{g.name}</option>))}
-                    </select>
+        <div className="service-page">
+            {isLoggedIn && (
+                <section className="card">
+                    <h2>Add community service hours</h2>
+                    <form className="slot-form" onSubmit={handleSubmit}>
+                        <label>Gardener
+                            <select
+                                required
+                                value={gardenerId}
+                                onChange={(e) => setGardenerId(e.target.value)}
+                            >
+                                <option value="">-- none --</option>
+                                {gardeners.map((g) => (<option key={g.id} value={g.id}>{g.name}</option>))}
+                            </select>
+                        </label>
 
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        disabled={!authenticatedUser}
-                    />
+                        <label>Date
+                            <input
+                                type="date"
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                            />
+                        </label>
 
-                    <input
-                        type="number"
-                        min={0}
-                        value={hoursCompleted}
-                        onChange={(e) =>
-                            setHoursCompleted(Number(e.target.value))
-                        }
-                        disabled={!authenticatedUser}
-                    />
-                    <button type="submit" disabled={!authenticatedUser}>
-                        +
-                    </button>
-                </form>
-            </div>
+                        <label>Hours
+                            <input
+                                type="number"
+                                min={0}
+                                value={hoursCompleted}
+                                onChange={(e) =>
+                                    setHoursCompleted(Number(e.target.value))
+                                }
+                            />
+                        </label>
+                        <button type="submit">
+                            +
+                        </button>
+                    </form>
+                </section>
+            )}
 
-            <h2>Service Hours protocol</h2>
-            {authenticatedUser && (
-                <>
-                    {[...groups.entries()].map(([year, slots]) => (
-                        <div key={year}>
-                            <h3>{year}</h3>
-                            <ul>
-                                {slots.map((slot) => (
-                                    <li key={slot.id}>
-                                        {gardeners.find((g) => g.id === slot.gardenerId)?.name ?? "Unassigned"},{" "}
-                                        {new Date(slot.date).toLocaleDateString("de-DE")}, {slot.hoursCompleted}
+            <section className="card">
+                <h2>Service Hours protocol</h2>
+                {isLoggedIn && (
+                    <>
+                        {[...groups.entries()].map(([year, slots]) => (
+                            <div key={year}>
+                                <h3>{year} <span className="year-total">{slots.reduce((sum, s) => sum + s.hoursCompleted, 0)} h</span></h3>
+                                <ul className="slot-list">
+                                    {slots.map((slot) => (
+                                        <li key={slot.id}>
+                                            <span>{gardeners.find((g) => g.id === slot.gardenerId)?.name ?? "Unassigned"}</span>
+                                            <span>{new Date(slot.date).toLocaleDateString("de-DE")}</span>
+                                            <span>{slot.hoursCompleted} h</span>
+                                            <button
+                                                className="delete-btn"
+                                                aria-label="Delete entry"
+                                                onClick={() => {
+                                                    if (window.confirm("Delete this entry?")) deleteServiceSlot(slot.id);
+                                                }}
+                                            >
+                                                ✕
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </>
+                )}
+                {!isLoggedIn && (
+                    <>
+                        <div className="preview-wrap">
+                            <ul className="slot-list preview-blur" aria-hidden="true">
+                                {PREVIEW_ROWS.map((row) => (
+                                    <li key={row.date}>
+                                        <span>Max Mustermann</span><span>{row.date}</span><span>{row.hours} h</span>
                                     </li>
                                 ))}
                             </ul>
+                            <div className="preview-overlay">
+                                <p>The protocol is only visible to logged-in members.</p>
+                                <LoginForm />
+                            </div>
                         </div>
-                    ))}
-                </>
-            )}
-            {!authenticatedUser && (
-                <>
-                    <p>Protocol for completed community service hours is only accessible by logged-in users.</p>
-                    <hr />
-                    <LoginForm />
-                </>
-            )}
-        </>
+                    </>
+                )}
+            </section>
+        </div>
     );
 }
