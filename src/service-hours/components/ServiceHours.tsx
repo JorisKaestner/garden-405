@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../supabase/AuthContext.tsx";
 import { supabase } from "../../supabase/supabaseClient.ts";
 import type { ServiceSlot, Gardener } from "../../types";
+import LoginForm from "../../garden-planner/components/LoginForm.tsx";
 
 export default function ServiceHours() {
     const [serviceSlots, setServiceSlots] = useState<ServiceSlot[]>([]);
     const [gardeners, setGardeners] = useState<Gardener[]>([]);
+
+    // supabase user auth
+    const authenticatedUser = useAuth();
 
     // Form state
     const [date, setDate] = useState(
@@ -54,7 +58,7 @@ export default function ServiceHours() {
         const { data, error } = await supabase.from("service_hours").insert(
             { date: date, gardenerId: gardenerId, hoursCompleted: hoursCompleted }
         ).select().single();
-        if (error) { 
+        if (error) {
             console.error(error);
             return;
         }
@@ -81,11 +85,12 @@ export default function ServiceHours() {
     return (
         <>
             <div>
-                <h2>Pflichtstunden hinzufügen</h2>
+                <h2>Add community service hours</h2>
                 <form onSubmit={handleSubmit}>
                     <select
                         value={gardenerId}
                         onChange={(e) => setGardenerId(e.target.value)}
+                        disabled={!authenticatedUser}
                     >
                         <option value="">-- none --</option>
                         {gardeners.map((g) => (<option key={g.id} value={g.id}>{g.name}</option>))}
@@ -95,6 +100,7 @@ export default function ServiceHours() {
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
+                        disabled={!authenticatedUser}
                     />
 
                     <input
@@ -104,27 +110,39 @@ export default function ServiceHours() {
                         onChange={(e) =>
                             setHoursCompleted(Number(e.target.value))
                         }
+                        disabled={!authenticatedUser}
                     />
-                    <button type="submit">
+                    <button type="submit" disabled={!authenticatedUser}>
                         +
                     </button>
                 </form>
             </div>
 
-            <h2>Stundenprotokoll</h2>
-            {[...groups.entries()].map(([year, slots]) => (
-                <div key={year}>
-                    <h3>{year}</h3>
-                    <ul>
-                        {slots.map((slot) => (
-                            <li key={slot.id}>
-                                {gardeners.find((g) => g.id === slot.gardenerId)?.name ?? "Unassigned"},{" "}
-                                {new Date(slot.date).toLocaleDateString("de-DE")}, {slot.hoursCompleted}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+            <h2>Service Hours protocol</h2>
+            {authenticatedUser && (
+                <>
+                    {[...groups.entries()].map(([year, slots]) => (
+                        <div key={year}>
+                            <h3>{year}</h3>
+                            <ul>
+                                {slots.map((slot) => (
+                                    <li key={slot.id}>
+                                        {gardeners.find((g) => g.id === slot.gardenerId)?.name ?? "Unassigned"},{" "}
+                                        {new Date(slot.date).toLocaleDateString("de-DE")}, {slot.hoursCompleted}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </>
+            )}
+            {!authenticatedUser && (
+                <>
+                    <p>Protocol for completed community service hours is only accessible by logged-in users.</p>
+                    <hr />
+                    <LoginForm />
+                </>
+            )}
         </>
     );
 }
