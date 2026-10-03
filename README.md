@@ -10,7 +10,7 @@ Garden 405 is a small web application for organizing our garden plots and keepin
 
 You can explore the current state at [https://garden-405.vercel.app/](https://garden-405.vercel.app/). Since this application contains data from our real garden, visitor accounts and write access are disabled. You are nevertheless welcome to explore the application or deploy your own instance and adapt it to your needs.
 
-![Demo Screenshot](src/assets/demo_screenshot.png "Demo Screenshot")
+![Demo Screenshot](demo_screenshots/garden_planner.png "Demo Screenshot") ![Demo Screenshot](demo_screenshots/service_hours.png "Demo Screenshot")
 
 ## Getting Started
 
@@ -97,13 +97,16 @@ garden-405/
 
 ```text
 src/
-├── assets                      # static assets like the backdrop for the layout
-└── components                  
-    ├── Garden.tsx              # main component of Garden application. Holds all states
-    ├── GardenCell.tsx          # single garden cell component
-    ├── GardenGrid.tsx          # arranges multiple GardenCells as grid
-    ├── LoginForm.tsx           # send login events to Supabase Auth
-    └── SelectionInfoPanel.tsx  # display and edit information about plots
+└── garden_planner                  # garden layout application
+    ├── assets                      # static assets like the backdrop for the layout
+    └── components                  
+        ├── Garden.tsx              # main component of Garden application. Holds all states
+        ├── GardenCell.tsx          # single garden cell component
+        ├── GardenGrid.tsx          # arranges multiple GardenCells as grid
+        ├── LoginForm.tsx           # send login events to Supabase Auth
+        └── SelectionInfoPanel.tsx  # display and edit information about plots
+└── service_hours
+    └── components/ServiceHours.tsx # application to track community service work for the garden 
 └── supabase  
     ├── demo_data               # database creation scripts and demo data
     ├── AuthContext.tsx         # Supabase authentication provider           
@@ -111,6 +114,7 @@ src/
 ├── App.css                     # styling
 ├── App.tsx                     # App main entrypoint
 ├── index.css                   # styling
+├── Layout.tsx                  # Nav-Bar component
 ├── main.tsx                    # React main entrypoint
 └── types.ts                    # TypeScript types
 ```
