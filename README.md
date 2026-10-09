@@ -8,9 +8,9 @@ Every year, our little garden with the plot number 405 flourishes with plants of
 
 Garden 405 is a small web application for organizing our garden plots and keeping track of the plants growing in them.
 
-You can explore the current state at [https://garden-405.vercel.app/](https://garden-405.vercel.app/). Since this application contains data from our real garden, visitor accounts and write access are disabled. You are nevertheless welcome to explore the application or deploy your own instance and adapt it to your needs.
+You can explore the current state at [https://garden-405.joris-kaestner.de/](https://garden-405.joris-kaestner.de/). Since this application contains data from our real garden, visitor accounts and write access are disabled. You are nevertheless welcome to explore the application or deploy your own instance and adapt it to your needs.
 
-![Demo Screenshot](demo_screenshots/garden_planner.png "Demo Screenshot") ![Demo Screenshot](demo_screenshots/service_hours.png "Demo Screenshot")
+![Demo Screenshot](demo_screenshots/garden_planner.png "Demo Screenshot Garden-Layout") ![Demo Screenshot](demo_screenshots/service_hours.png "Demo Screenshot Service-Hours")
 
 ## Getting Started
 
@@ -43,6 +43,9 @@ Authentication is handled through Supabase Auth using passwordless magic links.
 Users must be added manually through the Supabase dashboard:
 `Project > Authentication > Users`
 There is currently no public registration form because this application is intended for private use.
+
+#### (Optional) Deploy on Vercel
+[Vercel](https://vercel.com/) has a free plan to directly deploy from a Vite repository. Connect your published GitHub repo and deploy your app on the domain, which is provided by Vercel. You can add your own domain name later or use any another hosting and deployment service of your liking.
 
 ### Environment Variables
 
