@@ -136,8 +136,6 @@ export default function Garden() {
                             <button className="copy-paste-button" onClick={() => lastSelectedId && copiedPlot && updatePlot(lastSelectedId, copiedPlot)}>Paste</button>
                             <button className="copy-paste-button" onClick={() => revertChange()}>Revert</button>
                         </div>
-                        <hr/>
-                        <button onClick={() => supabase.auth.signOut()}>Sign out</button>
                     </>
                 )}
                 {!user &&
